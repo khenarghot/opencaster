@@ -12,7 +12,11 @@
 #include <sys/socket.h>
 #include <net/if.h>
 
+#ifndef linux 
 #include <net/if_tun.h>
+#else
+#include <linux/if_tun.h>
+#endif
 
 #include "sectioncrc.h"
 
@@ -28,8 +32,8 @@ static int stuff = 0;
 static char padding[184];
 static char ip_device[IFNAMSIZ];
 static char s[180];
-static const char *Id = "$Id: mpe.c 25 2011-10-13 15:35:18Z jfbcable $";
-const MPE_HEADER_LEN=12;
+//static const char *Id = "$Id: mpe.c 25 2011-10-13 15:35:18Z jfbcable $";
+const int MPE_HEADER_LEN=12;
 int tun_fd = -1;
 
 #ifdef IFF_TUN
