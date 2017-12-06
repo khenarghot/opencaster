@@ -32,8 +32,6 @@
 
 int main(int argc, char *argv[])
 {
-	int open_file;
-	int byte_read;
 	int fd_ts;			/* File descriptor of ts file */
 	unsigned short pid;
 	unsigned int adaptation_field;
@@ -44,11 +42,14 @@ int main(int argc, char *argv[])
 
 	/* Open first ts file */
 	if (argc >= 2) {
-		open_file = 1;
-		fd_ts = open(argv[open_file], O_RDONLY);
-		if (fd_ts < 0) {
-			fprintf(stderr, "Can't find file %s\n", argv[open_file]);
-			return 2;
+                if (!strcmp(argv[1], "-")) {
+                        fd_ts = 0;
+                } else {
+                        fd_ts = open(argv[1], O_RDONLY);
+                        if (fd_ts < 0) {
+                                fprintf(stderr, "Can't find file %s\n", argv[1]);
+                                return 2;
+                        }
 		}
 	} else {
 		fprintf(stderr, "Usage: 'tsccc filename.ts '\n");
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
 	memset(repeated_cc_table, 0,  MAX_PID);
 	
 	while(1) {
-		
+                int byte_read;		
 		/* read packets */
 		byte_read = 0;
 		byte_read = read(fd_ts, packet, TS_PACKET_SIZE);
