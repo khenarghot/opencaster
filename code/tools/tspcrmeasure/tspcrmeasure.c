@@ -46,8 +46,12 @@ int main(int argc, char *argv[])
 	unsigned char ts_packet[TS_PACKET_SIZE];/* TS packet */
 
 	/* Open ts file */
-	if (argc == 3)
-	    fd_ts = open(argv[1], O_RDONLY);
+	if (argc == 3) {
+        if (strcmp(argv[1], "-") != 0) 
+            fd_ts = open(argv[1], O_RDONLY);
+        else
+            fd_ts = 0;
+    }
 	else {
 	    fprintf(stderr, "Usage: 'tspcrmeasure input.ts expected_bit/s'\n");
 	    return 2;
